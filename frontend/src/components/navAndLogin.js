@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { BarChart2, FileText, Inbox, LogIn, LogOut, Menu, Bell, Search, Settings, Users, MessageSquare, PieChart, LifeBuoy, FileCheck2, Zap, Globe } from 'lucide-react';
 import {theme} from '../utils/theme';
+import brandLogoUrl from '../assets/PNODE360.pptx.png';
+
 export const Sidebar = ({ user, isOpen, activeView, setActiveView, setDetailView, openModal, t, language }) => {
     const navConfig = {
       applicant: [
@@ -44,7 +46,7 @@ export const Sidebar = ({ user, isOpen, activeView, setActiveView, setDetailView
       <div className={`h-full bg-white border-gray-200 z-30 transition-transform duration-300 lg:translate-x-0 w-64 ${sidebarClasses} flex flex-col`}>
         {/* Header */}
         <div className={`flex items-center justify-center p-4 border-b h-16 bg-${theme.primary}`}>
-          <img src={theme.logoUrl} alt="Logo" className="h-12 w-auto brightness-0 invert" />
+          <img src={theme.logoUrl} alt="Logo" className="h-12 w-18 brightness-0 invert" />
         </div>
   
         {/* Scrollable nav */}
@@ -184,5 +186,100 @@ export const Sidebar = ({ user, isOpen, activeView, setActiveView, setDetailView
       </header>
     );
   };
+  export const LoginPage = ({ onLogin, t, language }) => {
+    const [email, setEmail] = useState('applicant@demo.com');
+    const [password, setPassword] = useState('password123');
+    const [role, setRole] = useState('applicant');
   
-export const LoginPage = ({ onLogin, t, language }) => { const [email, setEmail] = useState('applicant@demo.com'); const [password, setPassword] = useState('password123'); const [role, setRole] = useState('applicant'); const defaultCredentials = { applicant: 'applicant@demo.com', reviewer: 'reviewer@demo.com', editor: 'editor@demo.com', admin: 'admin@demo.com' }; useEffect(() => { if (defaultCredentials[role]) { setEmail(defaultCredentials[role]); setPassword('password123'); } }, [role]); const handleSubmit = (e) => { e.preventDefault(); onLogin(email, role); }; return <div className="flex items-center justify-center min-h-screen bg-gray-100 font-tajawal"> <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-2xl shadow-lg"> <div className="text-center"><img src={theme.logoIconUrl} alt="Logo" className="w-28 h-28 mx-auto" /><h2 className="mt-6 text-3xl font-bold text-gray-900">{t('grantManagementPlatform')}</h2><p className="mt-2 text-sm text-gray-600">{t('forEnvironmentalSustainability')}</p></div> <form className="space-y-4" onSubmit={handleSubmit}> <div><label className="font-medium">{t('email')}</label><input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full mt-2 p-3 border rounded-lg"/></div> <div><label className="font-medium">{t('password')}</label><input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="w-full mt-2 p-3 border rounded-lg"/></div> <div><label className="font-medium">{t('userType')}</label><select value={role} onChange={(e) => setRole(e.target.value)} className="w-full mt-2 p-3 border rounded-lg bg-white"><option value="applicant">{t('applicant')}</option><option value="reviewer">{t('reviewer')}</option><option value="editor">{t('editor')}</option><option value="admin">{t('admin')}</option></select></div> <button type="submit" className={`w-full flex justify-center items-center gap-2 py-3 px-4 text-lg font-semibold rounded-lg text-white bg-${theme.primary} hover:bg-${theme.primaryHover} transition-all duration-300`}><LogIn /> {t('login')}</button> </form> </div> </div>; };
+    const defaultCredentials = {
+      applicant: 'applicant@demo.com',
+      reviewer: 'reviewer@demo.com',
+      editor: 'editor@demo.com',
+      admin: 'admin@demo.com',
+    };
+  
+    useEffect(() => {
+      if (defaultCredentials[role]) {
+        setEmail(defaultCredentials[role]);
+        setPassword('password123');
+      }
+    }, [role]);
+  
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      onLogin(email, role);
+    };
+  
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100 font-tajawal" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+        <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-2xl shadow-lg">
+          {/* Logo (green) */}
+          <div className="text-center">
+          <div
+  className="w-28 h-28 mx-auto bg-green-700"
+  aria-label="Logo"
+  style={{
+    maskImage: `url(${brandLogoUrl})`,
+    maskSize: 'contain',
+    maskRepeat: 'no-repeat',
+    maskPosition: 'center',
+    WebkitMaskImage: `url(${brandLogoUrl})`,
+    WebkitMaskSize: 'contain',
+    WebkitMaskRepeat: 'no-repeat',
+    WebkitMaskPosition: 'center',
+  }}
+/>
+            <h2 className="mt-6 text-3xl font-bold text-gray-900">{t('grantManagementPlatform')}</h2>
+            <p className="mt-2 text-sm text-gray-600">{t('forEnvironmentalSustainability')}</p>
+          </div>
+  
+          {/* Form */}
+          <form className="space-y-4" onSubmit={handleSubmit}>
+            <div>
+              <label className="font-medium">{t('email')}</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full mt-2 p-3 border rounded-lg"
+              />
+            </div>
+  
+            <div>
+              <label className="font-medium">{t('password')}</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full mt-2 p-3 border rounded-lg"
+              />
+            </div>
+  
+            <div>
+              <label className="font-medium">{t('userType')}</label>
+              <select
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                className="w-full mt-2 p-3 border rounded-lg bg-white"
+              >
+                <option value="applicant">{t('applicant')}</option>
+                <option value="reviewer">{t('reviewer')}</option>
+                <option value="editor">{t('editor')}</option>
+                <option value="admin">{t('admin')}</option>
+              </select>
+            </div>
+  
+            <button
+              type="submit"
+              className={`w-full flex justify-center items-center gap-2 py-3 px-4 text-lg font-semibold rounded-lg text-white bg-${theme.primary} hover:bg-${theme.primaryHover} transition-all duration-300`}
+            >
+              <LogIn />
+              {t('login')}
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  };
