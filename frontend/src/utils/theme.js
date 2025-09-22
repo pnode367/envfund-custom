@@ -1,1 +1,2 @@
-export const theme = { primary: 'green-800', primaryHover: 'green-900', secondary: 'blue-600', lightBg: 'green-50', lightText: 'green-800', logoUrl: 'https://cdn.brandfetch.io/id2RULJAaS/id483a9a-0.svg?c=1bxid64Mup7aczewSAYMX&t=1752776859732', logoIconUrl: 'https://cdn.brandfetch.io/id2RULJAaS/id483a9a-0.svg?c=1bxid64Mup7aczewSAYMX&t=1752776859732' };
+export const theme = { primary: 'green-800', primaryHover: 'green-900', secondary: 'blue-600', lightBg: 'green-50', lightText: 'green-800', 
+    logoUrl: 'https://cdn.brandfetch.io/id2RULJAaS/id483a9a-0.svg?c=1bxid64Mup7aczewSAYMX&t=1752776859732', logoIconUrl: 'https://cdn.brandfetch.io/id2RULJAaS/id483a9a-0.svg?c=1bxid64Mup7aczewSAYMX&t=1752776859732' };

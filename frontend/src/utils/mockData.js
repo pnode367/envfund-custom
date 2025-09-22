@@ -1,7 +1,42 @@
 import React, { } from 'react';
 import { CheckCircle, XCircle, Clock, FileText, PlusCircle, DollarSign, HardDrive, Megaphone, ShieldCheck } from 'lucide-react';
 
-export const mockUsers = { 'applicant@demo.com': { name: 'Dr. Abdullah Al-Salmi', role: 'applicant', email: 'applicant@demo.com', phone: '0501234567', nationalId: '1012345678', dob: '1985-05-20', verified: true }, 'reviewer@demo.com': { name: 'Noura Al-Kathiri', role: 'reviewer', email: 'reviewer@demo.com', phone: '0559876543', nationalId: '2012345678', dob: '1990-11-15', verified: true }, 'editor@demo.com': { name: 'Khalid Al-Saleh', role: 'editor', email: 'editor@demo.com', phone: '0533344455' }, 'admin@demo.com': { name: 'System Admin', role: 'admin', email: 'admin@demo.com', phone: '0511122233' }, };
+export const mockUsers = {
+    'applicant@demo.com': {
+      name: 'Dr. Abdullah Al-Salmi',
+      role: 'applicant',
+      email: 'applicant@demo.com',
+      phone: '0501234567',
+      nationalId: '1012345678',
+      dob: '1985-05-20',
+      verified: true,
+      avatarUrl: 'https://images.unsplash.com/photo-1544006659-f0b21884ce1d?q=80&w=256&auto=format&fit=crop' // sample portrait
+    },
+    'reviewer@demo.com': {
+      name: 'Noura Al-Kathiri',
+      role: 'reviewer',
+      email: 'reviewer@demo.com',
+      phone: '0559876543',
+      nationalId: '2012345678',
+      dob: '1990-11-15',
+      verified: true,
+      avatarUrl: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=256&auto=format&fit=crop'
+    },
+    'editor@demo.com': {
+      name: 'Khalid Al-Saleh',
+      role: 'editor',
+      email: 'editor@demo.com',
+      phone: '0533344455',
+      avatarUrl: 'https://www.touristsaudiarabia.com/wp-content/uploads/2023/05/shutterstock_1224851173.jpg?q=80&w=256&auto=format&fit=crop'
+    },
+    'admin@demo.com': {
+      name: 'System Admin',
+      role: 'admin',
+      email: 'admin@demo.com',
+      phone: '0511122233',
+      avatarUrl: 'https://static.euronews.com/articles/stories/06/19/29/52/1440x810_cmsv2_012db673-f8b6-5e9f-a979-4f546915b817-6192952.jpg?q=80&w=256&auto=format&fit=crop'
+    },
+  };
 export const mockApplications = [ { id: 'APP-00124', title: 'Study of Climate Change Impact on Water Resources', status: 'approved', submissionDate: '2024-03-15', stage: 'post-award', applicant: 'King Fahd University of Petroleum and Minerals', totalFunding: 250000, summary: "The project aims to analyze the effects of climate change on water resources in the Eastern Province using advanced hydrological models." }, { id: 'APP-00125', title: '"Our Beaches Without Plastic" Initiative', status: 'revision', submissionDate: '2024-04-01', feedback: 'Please clarify the mechanism for engaging volunteers and the media coverage plan.', stage: 'application', applicant: 'Saudi Environmental Society', totalFunding: 150000, summary: "A community initiative to clean major beaches in the Kingdom and raise awareness about the dangers of plastic pollution." }, { id: 'APP-00126', title: 'Developing Innovative E-Waste Recycling Solutions', status: 'review', submissionDate: '2024-04-20', stage: 'review', applicant: 'Technology Recycling Co.', totalFunding: 400000, summary: "A pioneering project to develop a new chemical process for extracting precious metals from e-waste with high efficiency and low environmental impact." }, { id: 'APP-00127', title: 'Loan Guarantee Program for Small Solar Projects', status: 'approved', submissionDate: '2024-02-10', stage: 'post-award', applicant: 'Clean Technology Group', totalFunding: 750000, summary: "A financial program to facilitate financing for solar energy projects for homes and SMEs." }, { id: 'APP-00128', applicant: 'Sustainability Research Center', title: 'AI-Powered Air Quality Monitoring in Industrial Cities', type: 'Research', submitted: '2024-04-22', status: 'review', smartScore: 88, stage: 'review', totalFunding: 320000, summary: "Using a network of sensors and machine learning models to provide accurate, real-time air quality data in major industrial cities." }, { id: 'APP-00129', applicant: 'Green Horizons Foundation', title: 'Reforestation Project in Asir Region', status: 'rejected', submissionDate: '2024-03-20', stage: 'application', totalFunding: 220000, summary: "A project to plant one million native trees in the Asir region to combat desertification." }, ];
 export const mockGrantDetails = { 'APP-00124': { totalFunding: 250000, budget: [ { category: 'Salaries', allocated: 120000 }, { category: 'Equipment', allocated: 80000 }, { category: 'Field Trips', allocated: 30000 }, { category: 'Publishing', allocated: 20000 }, ], expenses: [ { id: 1, date: '2024-04-05', description: 'Water quality sensors', category: 'Equipment', amount: 45000 }, { id: 2, date: '2024-04-10', description: 'Lead researcher salary (April)', category: 'Salaries', amount: 15000 }, ], milestones: [ { id: 1, title: 'Procurement and Installation of Monitoring Devices', status: 'completed', report: 'Q1_Report.pdf', invoice: 'INV-001.pdf', reportSubmitted: true, invoicePaid: true, deadline: '2024-04-30', funds: 125000 }, { id: 2, title: 'Initial Data Collection and Analysis', status: 'active', report: null, invoice: null, reportSubmitted: false, invoicePaid: false, deadline: '2024-07-30', funds: 75000 }, { id: 3, title: 'Writing and Submitting Research Paper', status: 'pending', report: null, invoice: null, reportSubmitted: false, invoicePaid: false, deadline: '2024-09-30', funds: 50000 }, ] }, 'APP-00127': { totalFunding: 750000, budget: [{category: 'Loan Guarantees', allocated: 700000}, {category: 'Admin Fees', allocated: 50000}], expenses: [], milestones: [{id: 1, title: 'Issuance of First Batch of Guarantees', status: 'active', deadline: '2024-06-30', funds: 750000}]} };
 export const mockDataRoomFiles = { 'APP-00124': [ { id: 'f1', name: 'Full_Research_Proposal.pdf', type: 'Proposal', uploaded: '2024-03-15' }, { id: 'f2', name: 'Team_CVs.zip', type: 'Team', uploaded: '2024-03-15' }, ], 'APP-00126': [ { id: 'f3', name: 'Feasibility_Study.pdf', type: 'Proposal', uploaded: '2024-04-20' }, { id: 'f4', name: 'Project_Plan.docx', type: 'Plan', uploaded: '2024-04-20' } ] };
