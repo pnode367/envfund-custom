@@ -2,37 +2,37 @@ import React, { } from 'react';
 import { CheckCircle, XCircle, Clock, FileText, PlusCircle, DollarSign, HardDrive, Megaphone, ShieldCheck } from 'lucide-react';
 
 export const mockUsers = {
-    'applicant@demo.com': {
+    'applicant@ksu.edu.sa': {
       name: 'Dr. Abdullah Al-Salmi',
       role: 'applicant',
-      email: 'applicant@demo.com',
+      email: 'applicant@ksu.edu.sa',
       phone: '0501234567',
       nationalId: '1012345678',
       dob: '1985-05-20',
       verified: true,
       avatarUrl: 'https://images.unsplash.com/photo-1544006659-f0b21884ce1d?q=80&w=256&auto=format&fit=crop' // sample portrait
     },
-    'reviewer@demo.com': {
+    'reviewer@ksu.edu.sa': {
       name: 'Noura Al-Kathiri',
       role: 'reviewer',
-      email: 'reviewer@demo.com',
+      email: 'reviewer@ksu.edu.sa',
       phone: '0559876543',
       nationalId: '2012345678',
       dob: '1990-11-15',
       verified: true,
       avatarUrl: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=256&auto=format&fit=crop'
     },
-    'editor@demo.com': {
+    'editor@ksu.edu.sa': {
       name: 'Khalid Al-Saleh',
       role: 'editor',
-      email: 'editor@demo.com',
+      email: 'editor@ksu.edu.sa',
       phone: '0533344455',
       avatarUrl: 'https://www.touristsaudiarabia.com/wp-content/uploads/2023/05/shutterstock_1224851173.jpg?q=80&w=256&auto=format&fit=crop'
     },
-    'admin@demo.com': {
+    'admin@ksu.edu.sa': {
       name: 'System Admin',
       role: 'admin',
-      email: 'admin@demo.com',
+      email: 'admin@ksu.edu.sa',
       phone: '0511122233',
       avatarUrl: 'https://static.euronews.com/articles/stories/06/19/29/52/1440x810_cmsv2_012db673-f8b6-5e9f-a979-4f546915b817-6192952.jpg?q=80&w=256&auto=format&fit=crop'
     },

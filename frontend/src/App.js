@@ -414,10 +414,17 @@ useEffect(() => {
       notifications={notifications[user.role] || []}
     />
   )}
-  <main className="p-4 sm:p-6 lg:p-8">
+ <main className="p-4 sm:p-6 lg:p-8">
   {user
     ? renderContent()
-    : <LoginPage onLogin={handleLogin} onRegister={handleRegister} t={t} language={language} />}
+    : <LoginPage
+        onLogin={handleLogin}
+        onRegister={handleRegister}
+        t={t}
+        language={language}
+        setLanguage={setLanguage}   // <-- add this
+      />
+  }
 </main>
 
 </div>

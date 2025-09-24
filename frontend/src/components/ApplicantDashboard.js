@@ -18,7 +18,7 @@ export const ApplicantDashboard = ({ setDetailView, openModal, t }) => {
     return (
         <div className="space-y-6">
             <div className={`bg-gradient-to-br from-green-800 to-green-600 text-white p-8 rounded-2xl shadow-lg`}>
-                <h2 className="text-3xl font-bold">{t('welcome')}, {mockUsers['applicant@demo.com'].name}</h2>
+                <h2 className="text-3xl font-bold">{t('welcome')}, {mockUsers['applicant@ksu.edu.sa'].name}</h2>
                 <p className="mt-2 opacity-80">Here is a summary of your activities and applications. Let's make a positive impact!</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

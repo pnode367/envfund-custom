@@ -8,7 +8,7 @@ export const IntegrationsView = ({ t }) => { return ( <div className="space-y-6"
 export const EditorDashboard = ({ t, templates = [] }) => {
     return (
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold">{t('welcome')}, {mockUsers['editor@demo.com'].name}</h2>
+        <h2 className="text-2xl font-bold">{t('welcome')}, {mockUsers['editor@ksu.edu.sa'].name}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <StatCard title="Document Templates" value={templates.length} icon={<FileCheck2 />} color="blue" />
           <StatCard title="Reviews Required" value="3" icon={<Edit />} color="yellow" />
@@ -75,7 +75,7 @@ export const EditorDashboard = ({ t, templates = [] }) => {
       onAssign?.({
         applicationId: application.id,
         reviewerEmail,
-        assignedBy: 'admin@demo.com', // or currentUser.email if you track admins
+        assignedBy: 'admin@ksu.edu.sa', // or currentUser.email if you track admins
       });
       onClose();
     };

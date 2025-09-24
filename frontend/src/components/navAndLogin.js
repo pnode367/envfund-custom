@@ -217,19 +217,19 @@ export const Sidebar = ({
       </header>
     );
   };
-  export const LoginPage = ({ onLogin, onRegister, t, language }) => {
-    const [mode, setMode] = useState('login'); // 'login' | 'register'
+  export const LoginPage = ({ onLogin, onRegister, t, language, setLanguage }) => {
+    const [mode, setMode] = useState('login');
   
-    // ---- Login state ----
-    const [email, setEmail] = useState('applicant@demo.com');
+    // Login state
+    const [email, setEmail] = useState('applicant@ksu.edu.sa');
     const [password, setPassword] = useState('password123');
     const [role, setRole] = useState('applicant');
   
     const defaultCredentials = {
-      applicant: 'applicant@demo.com',
-      reviewer: 'reviewer@demo.com',
-      editor:   'editor@demo.com',
-      admin:    'admin@demo.com',
+      applicant: 'applicant@ksu.edu.sa',
+      reviewer: 'reviewer@ksu.edu.sa',
+      editor:   'editor@ksu.edu.sa',
+      admin:    'admin@ksu.edu.sa',
     };
   
     useEffect(() => {
@@ -240,17 +240,31 @@ export const Sidebar = ({
       }
     }, [role, mode]);
   
+    // Persist chosen language
+    useEffect(() => {
+      const saved = localStorage.getItem('ui:lang');
+      if (saved && saved !== language && setLanguage) {
+        setLanguage(saved);
+      }
+    }, []); // run once
+  
+    const handleLangChange = (e) => {
+      const val = e.target.value;
+      localStorage.setItem('ui:lang', val);
+      setLanguage?.(val);
+    };
+  
     const handleLoginSubmit = (e) => {
       e.preventDefault();
       onLogin?.(email, role, password);
     };
   
-    // ---- Register state ----
+    // Register state
     const [rName, setRName] = useState('');
     const [rEmail, setREmail] = useState('');
     const [rPassword, setRPassword] = useState('');
     const [rPhone, setRPhone] = useState('');
-    const [rRole, setRRole] = useState('applicant'); // default to applicant
+    const [rRole, setRRole] = useState('applicant');
   
     const handleRegisterSubmit = (e) => {
       e.preventDefault();
@@ -268,8 +282,26 @@ export const Sidebar = ({
     };
   
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100 font-tajawal" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+      <div
+        className="flex items-center justify-center min-h-screen bg-gray-100 font-tajawal"
+        dir={language === 'ar' ? 'rtl' : 'ltr'}
+      >
         <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-2xl shadow-lg">
+          {/* Top row: language selector */}
+          <div className={`flex items-center ${language === 'ar' ? 'justify-start' : 'justify-end'}`}>
+            <div className="flex items-center gap-2">
+              <Globe size={18} className="text-gray-600" />
+              <select
+                value={language}
+                onChange={handleLangChange}
+                className="border rounded-md px-2 py-1 text-sm bg-white"
+              >
+                <option value="en">English</option>
+                <option value="ar">العربية</option>
+              </select>
+            </div>
+          </div>
+  
           {/* Logo */}
           <div className="text-center">
             <div
@@ -286,8 +318,12 @@ export const Sidebar = ({
                 WebkitMaskPosition: 'center',
               }}
             />
-            <h2 className="mt-6 text-3xl font-bold text-gray-900">{t('grantManagementPlatform')}</h2>
-            <p className="mt-2 text-sm text-gray-600">{t('forEnvironmentalSustainability')}</p>
+            <h2 className="mt-6 text-3xl font-bold text-gray-900">
+              {t('grantManagementPlatform')}
+            </h2>
+            <p className="mt-2 text-sm text-gray-600">
+              {t('forEnvironmentalSustainability')}
+            </p>
           </div>
   
           {/* Tabs */}
