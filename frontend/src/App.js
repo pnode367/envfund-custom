@@ -9,7 +9,7 @@ import {DataRoomView, EditorDashboard,DocumentTemplatesView,IntegrationsView ,As
 
 import {ReviewerEvaluationView, ReviewerDashboard ,AdminDashboard,ReviewerAssignmentsView,
     ApplicationManagementView,SettingsView ,UserManagementView  } from './components/DashboardView';
-import {LoginPage,Sidebar,Header} from './components/navAndLogin';
+import {LoginPage,Sidebar,Header ,MobileHamburger  } from './components/navAndLogin';
 export default function App() {
   const [user, setUser] = useState(null);
   const [apps, setApps] = useState([]); 
@@ -19,7 +19,7 @@ export default function App() {
   const [collapsed, setCollapsed] = useState(false);
 
   const [language, setLanguage] = useState('en');
-  const [isSidebarOpen, setSidebarOpen] = useState(true);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [activeView, setActiveView] = useState('dashboard');
   const [detailView, setDetailView] = useState(null); 
   const [activeModal, setActiveModal] = useState(null);
@@ -309,9 +309,7 @@ useEffect(() => {
       })
       .filter(Boolean);
   }, [assignments, apps, evaluations, user]);
-  
-//   const handleLogin = (email, role) => { const userData = mockUsers[email]; if (userData && userData.role === role) { setUser(userData); setActiveView('dashboard'); } else { alert('Invalid credentials!'); } };
-  const handleLogout = () => { setUser(null); setDetailView(null); };
+   const handleLogout = () => { setUser(null); setDetailView(null); };
 
   const openModal = (modalName, data = null) => { setModalData(data); setActiveModal(modalName); }
   const closeModal = () => { setActiveModal(null); setModalData(null); }
@@ -384,71 +382,164 @@ useEffect(() => {
               return <LoginPage onLogin={handleLogin} t={t} language={language} />;
       }
   };
+  const dockedMargin = user
+  ? (language === 'ar'
+      ? (collapsed ? 'lg:mr-16' : 'lg:mr-64')
+      : (collapsed ? 'lg:ml-16' : 'lg:ml-64'))
+  : '';
+  const isRTL = language === 'ar';
 
-  return (
-      <>
-          <style>{`@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap'); body, .font-tajawal { font-family: 'Tajawal', sans-serif; } @keyframes modal-pop-in { from { transform: scale(.95); opacity: 0; } to { transform: scale(1); opacity: 1; } } .animate-modal-pop-in { animation: modal-pop-in 0.2s ease-out forwards; }`}</style>
-          <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="bg-gray-50 font-tajawal text-gray-800 min-h-screen">
-              {user && <Sidebar user={user} isOpen={isSidebarOpen} collapsed={collapsed}           // NEW
-    setCollapsed={setCollapsed}  activeView={activeView} setActiveView={setActiveView} setDetailView={setDetailView} openModal={openModal} t={t} language={language}/>}
-            
-              <div
-  className={`transition-all duration-300 ${
-    user && isSidebarOpen
-      ? (language === 'ar'
-          ? (collapsed ? 'lg:mr-16' : 'lg:mr-64')
-          : (collapsed ? 'lg:ml-16' : 'lg:ml-64'))
-      : (language === 'ar' ? 'lg:mr-0' : 'lg:ml-0')
-  }`}
->
-  {user && (
-    <Header
-      user={user}
-      onLogout={handleLogout}
-      onToggleSidebar={() => setSidebarOpen(!isSidebarOpen)}
-      openModal={openModal}
-      t={t}
-      language={language}
-      setLanguage={setLanguage}
-      setActiveView={setActiveView}
-      notifications={notifications[user.role] || []}
-    />
-  )}
- <main className="p-4 sm:p-6 lg:p-8">
-  {user
-    ? renderContent()
-    : <LoginPage
-        onLogin={handleLogin}
-        onRegister={handleRegister}
-        t={t}
-        language={language}
-        setLanguage={setLanguage}   // <-- add this
-      />
-  }
-</main>
+return (
+  <>
+    <style>{`@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap'); body, .font-tajawal { font-family: 'Tajawal', sans-serif; } @keyframes modal-pop-in { from { transform: scale(.95); opacity: 0; } to { transform: scale(1); opacity: 1; } } .animate-modal-pop-in { animation: modal-pop-in 0.2s ease-out forwards; }`}</style>
 
-</div>
+    <div dir={isRTL ? 'rtl' : 'ltr'} className="bg-gray-50 font-tajawal text-gray-800 min-h-screen">
+      {/* ① Floating hamburger (mobile/tablet only) */}
+      {user && (
+        <MobileHamburger
+          isRTL={isRTL}
+          onClick={() => setSidebarOpen(true)}   // open the drawer
+         
+        />
+      )}
 
-              {activeModal === 'aiAssistant' && <AiAssistantModal onClose={closeModal} t={t} />}
-              {activeModal === 'newApplication' && <NewApplicationForm onClose={closeModal} t={t} currentUser={user}
-          onSave={handleSaveApplication} 
-/>}
-              {activeModal === 'assignReviewer' && <AssignReviewerModal application={modalData} onClose={closeModal} t={t}  onAssign={handleAssignReviewer}   />}
-              {activeModal === 'addUser' && <AddUserModal onClose={closeModal} onAdd={handleAddUser}  t={t} />}
-              {activeModal === 'aiReport' && <AiReportGeneratorModal data={modalData} onClose={closeModal} t={t} />}
-              {activeModal === 'support' && <SupportCenterModal onClose={closeModal} openModal={openModal} t={t} setActiveView={setActiveView}/>}
-              {activeModal === 'milestoneDetails' && <MilestoneDetailsModal milestone={modalData} onClose={closeModal} t={t}/>}
-              {activeModal === 'sendAnnouncement' && <SendAnnouncementModal onClose={closeModal} t={t} updateNotifications={updateNotifications} />}
-              {activeModal === 'sendMessage' && <SendMessageModal user={modalData} onClose={closeModal} t={t} />}
-              {activeModal === 'templateForm' && (
-  <TemplateFormModal
-    data={modalData}          
-    onSave={handleSaveTemplate}
-    onClose={closeModal}
-    t={t}
-  />
-)}
-          </div>
-      </>
-  );
+      {/* ② Sidebar (drawer on <lg, docked on lg+) */}
+      {user && (
+        <Sidebar
+          user={user}
+          isOpen={isSidebarOpen}
+          setIsOpen={setSidebarOpen}            // allow Sidebar to close itself
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
+          activeView={activeView}
+          setActiveView={setActiveView}
+          setDetailView={setDetailView}
+          openModal={openModal}
+          t={t}
+          language={language}
+         
+        />
+      )}
+
+      {/* ③ Header + content; margin shifts only on lg+ */}
+      <div className={`transition-all duration-300 ${dockedMargin}`}>
+        {user && (
+          <Header
+            user={user}
+            onLogout={handleLogout}
+            onToggleSidebar={() => setSidebarOpen(v => !v)} // optional header toggle
+            openModal={openModal}
+            t={t}
+            language={language}
+            setLanguage={setLanguage}
+            setActiveView={setActiveView}
+            notifications={notifications[user.role] || []}
+          />
+        )}
+
+        <main className="p-4 sm:p-6 lg:p-8">
+          {user ? (
+            renderContent()
+          ) : (
+            <LoginPage
+              onLogin={handleLogin}
+              onRegister={handleRegister}
+              t={t}
+              language={language}
+              setLanguage={setLanguage}
+            />
+          )}
+        </main>
+      </div>
+
+      {/* ④ Modals (unchanged) */}
+      {activeModal === 'aiAssistant' && <AiAssistantModal onClose={closeModal} t={t} />}
+      {activeModal === 'newApplication' && (
+        <NewApplicationForm onClose={closeModal} t={t} currentUser={user} onSave={handleSaveApplication} />
+      )}
+      {activeModal === 'assignReviewer' && (
+        <AssignReviewerModal application={modalData} onClose={closeModal} t={t} onAssign={handleAssignReviewer} />
+      )}
+      {activeModal === 'addUser' && <AddUserModal onClose={closeModal} onAdd={handleAddUser} t={t} />}
+      {activeModal === 'aiReport' && <AiReportGeneratorModal data={modalData} onClose={closeModal} t={t} />}
+      {activeModal === 'support' && (
+        <SupportCenterModal onClose={closeModal} openModal={openModal} t={t} setActiveView={setActiveView} />
+      )}
+      {activeModal === 'milestoneDetails' && <MilestoneDetailsModal milestone={modalData} onClose={closeModal} t={t} />}
+      {activeModal === 'sendAnnouncement' && (
+        <SendAnnouncementModal onClose={closeModal} t={t} updateNotifications={updateNotifications} />
+      )}
+      {activeModal === 'sendMessage' && <SendMessageModal user={modalData} onClose={closeModal} t={t} />}
+      {activeModal === 'templateForm' && (
+        <TemplateFormModal data={modalData} onSave={handleSaveTemplate} onClose={closeModal} t={t} />
+      )}
+    </div>
+  </>
+);
 }
+//   return (
+//       <>
+//           <style>{`@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap'); body, .font-tajawal { font-family: 'Tajawal', sans-serif; } @keyframes modal-pop-in { from { transform: scale(.95); opacity: 0; } to { transform: scale(1); opacity: 1; } } .animate-modal-pop-in { animation: modal-pop-in 0.2s ease-out forwards; }`}</style>
+//           <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="bg-gray-50 font-tajawal text-gray-800 min-h-screen">
+//               {user && <Sidebar user={user} isOpen={isSidebarOpen} collapsed={collapsed}           // NEW
+//     setCollapsed={setCollapsed}  activeView={activeView} setActiveView={setActiveView} setDetailView={setDetailView} openModal={openModal} t={t} language={language}/>}
+            
+//               <div
+//   className={`transition-all duration-300 ${
+//     user && isSidebarOpen
+//       ? (language === 'ar'
+//           ? (collapsed ? 'lg:mr-16' : 'lg:mr-64')
+//           : (collapsed ? 'lg:ml-16' : 'lg:ml-64'))
+//       : (language === 'ar' ? 'lg:mr-0' : 'lg:ml-0')
+//   }`}
+// >
+//   {user && (
+//     <Header
+//       user={user}
+//       onLogout={handleLogout}
+//       onToggleSidebar={() => setSidebarOpen(!isSidebarOpen)}
+//       openModal={openModal}
+//       t={t}
+//       language={language}
+//       setLanguage={setLanguage}
+//       setActiveView={setActiveView}
+//       notifications={notifications[user.role] || []}
+//     />
+//   )}
+//  <main className="p-4 sm:p-6 lg:p-8">
+//   {user
+//     ? renderContent()
+//     : <LoginPage
+//         onLogin={handleLogin}
+//         onRegister={handleRegister}
+//         t={t}
+//         language={language}
+//         setLanguage={setLanguage}   // <-- add this
+//       />
+//   }
+// </main>
+
+// </div>
+
+//               {activeModal === 'aiAssistant' && <AiAssistantModal onClose={closeModal} t={t} />}
+//               {activeModal === 'newApplication' && <NewApplicationForm onClose={closeModal} t={t} currentUser={user}
+//           onSave={handleSaveApplication} 
+// />}
+//               {activeModal === 'assignReviewer' && <AssignReviewerModal application={modalData} onClose={closeModal} t={t}  onAssign={handleAssignReviewer}   />}
+//               {activeModal === 'addUser' && <AddUserModal onClose={closeModal} onAdd={handleAddUser}  t={t} />}
+//               {activeModal === 'aiReport' && <AiReportGeneratorModal data={modalData} onClose={closeModal} t={t} />}
+//               {activeModal === 'support' && <SupportCenterModal onClose={closeModal} openModal={openModal} t={t} setActiveView={setActiveView}/>}
+//               {activeModal === 'milestoneDetails' && <MilestoneDetailsModal milestone={modalData} onClose={closeModal} t={t}/>}
+//               {activeModal === 'sendAnnouncement' && <SendAnnouncementModal onClose={closeModal} t={t} updateNotifications={updateNotifications} />}
+//               {activeModal === 'sendMessage' && <SendMessageModal user={modalData} onClose={closeModal} t={t} />}
+//               {activeModal === 'templateForm' && (
+//   <TemplateFormModal
+//     data={modalData}          
+//     onSave={handleSaveTemplate}
+//     onClose={closeModal}
+//     t={t}
+//   />
+// )}
+//           </div>
+//       </>
+//   );
