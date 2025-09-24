@@ -368,7 +368,8 @@ useEffect(() => {
               case 'admin':
               switch(activeView) { 
                 case 'dashboard':
-      return <AdminDashboard apps={apps} {...commonProps} />;
+                    return <AdminDashboard apps={apps} users={users} {...commonProps} />;
+              
     case 'manage-applications':
       return <ApplicationManagementView apps={apps} {...commonProps} />;
             
