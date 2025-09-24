@@ -1,10 +1,19 @@
 import React, { useState, useEffect,isValidElement, cloneElement  } from 'react';
-import { BarChart2, FileText, Inbox, LogIn, LogOut, Menu, Bell, Search, Settings, Users, MessageSquare, PieChart, LifeBuoy, FileCheck2, Zap, Globe ,ChevronLeft, ChevronRight} from 'lucide-react';
 import {theme} from '../utils/theme';
 import brandLogoUrl from '../assets/PNODE360.pptx.png';
+import {
+ BarChart2, FileText, Inbox, LogIn, LogOut, Menu, Bell, Search, Settings, Users, MessageSquare,
+ FileCheck2,PieChart ,
+  Zap,
+  LifeBuoy,
+  ChevronLeft,
+  ChevronRight,
+  UserCircle ,
+Globe
+} from 'lucide-react'; // Make sure you have lucide-react installed
 
 export const Sidebar = ({
-  user,
+  user = { role: 'applicant', username: 'Guest' }, // Default user for testing
   isOpen,
   collapsed,
   setCollapsed,
@@ -12,8 +21,8 @@ export const Sidebar = ({
   setActiveView,
   setDetailView,
   openModal,
-  t,
-  language
+  t = (key) => key, // Default translation function
+  language = 'en',
 }) => {
   const navConfig = {
     applicant: [
@@ -43,26 +52,36 @@ export const Sidebar = ({
   };
 
   const navItems = navConfig[user.role] || [];
-  const handleNavClick = (key) => { setDetailView(null); setActiveView(key); };
 
+  const handleNavClick = (key) => {
+    setDetailView && setDetailView(null); // Ensure setDetailView is defined before calling
+    setActiveView(key);
+  };
+
+  // Dynamic classes for sidebar position and width based on state and language
   const sidebarClasses =
     language === 'ar'
       ? `fixed top-0 right-0 border-l ${isOpen ? 'translate-x-0' : 'translate-x-full'}`
       : `fixed top-0 left-0 border-r ${isOpen ? 'translate-x-0' : '-translate-x-full'}`;
 
-  const widthClass = collapsed ? 'w-16' : 'w-64';
+  const widthClass = collapsed ? 'w-16' : 'w-64'; // Tailwind CSS classes for width
 
-  // keep icon size consistent & safe even if an icon import is missing
+  // Function to render icons safely, ensuring consistent size and providing a fallback
   const renderIcon = (iconEl) =>
     isValidElement(iconEl)
       ? cloneElement(iconEl, { size: 22, className: 'shrink-0' })
-      : <PieChart size={22} className="shrink-0" />;
+      : <PieChart size={22} className="shrink-0" />; // Fallback icon using PieChart from commented version
 
   return (
-    <div className={`h-full bg-white border-gray-200 z-30 transition-transform duration-300 lg:translate-x-0 ${widthClass} ${sidebarClasses} flex flex-col`}>
-      {/* Header (logo unchanged) - make it relative so we can place the chevron in-corner */}
+    <div
+      className={`h-full bg-white border-gray-200 z-30 transition-transform duration-300 lg:translate-x-0 ${widthClass} ${sidebarClasses} flex flex-col`}
+      style={{ boxShadow: '0 0 15px rgba(0,0,0,0.05)' }} // Added subtle shadow for depth
+    >
+      {/* Header with logo and collapse toggle */}
       <div className={`relative flex items-center justify-center p-4 border-b h-16 bg-${theme.primary}`}>
-        <img src={theme.logoUrl} alt="Logo" className="h-12 w-18 brightness-0 invert" />
+      {!collapsed && (
+    <img src={theme.logoUrl} alt="Logo" className="h-12 w-18 brightness-0 invert" />
+  )}
 
         {/* Collapse toggle in header (desktop only), RTL-aware placement */}
         <button
@@ -73,12 +92,13 @@ export const Sidebar = ({
           title={collapsed ? (t('expand') || 'Expand') : (t('collapse') || 'Collapse')}
         >
           {language === 'ar'
-            ? (collapsed ? <ChevronLeft size={18}/> : <ChevronRight size={18}/>)
-            : (collapsed ? <ChevronRight size={18}/> : <ChevronLeft size={18}/>)}
+            ? (collapsed ? <ChevronLeft size={18} /> : <ChevronRight size={18} />)
+            : (collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />)}
         </button>
       </div>
 
-      {/* Scrollable nav */}
+
+      {/* Scrollable nav sections */}
       <nav className="flex-1 overflow-y-auto p-4">
         <ul className="space-y-1">
           {navItems.map((item) => (
@@ -86,11 +106,11 @@ export const Sidebar = ({
               <button
                 onClick={() => handleNavClick(item.key)}
                 title={collapsed ? item.text : undefined}
-                className={`w-full flex items-center ${collapsed ? 'justify-center' : 'justify-start'} gap-3 p-3 rounded-lg transition-colors ${
-                  activeView === item.key
-                    ? `bg-${theme.lightBg} text-${theme.lightText} font-bold`
-                    : 'text-gray-600 hover:bg-gray-100'
-                }`}
+                className={`w-full flex items-center ${collapsed ? 'justify-center' : 'justify-start'} gap-3 p-3 rounded-lg transition-colors
+                  ${activeView === item.key
+                    ? `bg-${theme.primary} text-white font-bold` // Active state: primary background, white text
+                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-800' // Non-active state: default text, hover background and darker text
+                  }`}
               >
                 {renderIcon(item.icon)}
                 {!collapsed && <span className="truncate">{item.text}</span>}
@@ -100,12 +120,35 @@ export const Sidebar = ({
         </ul>
       </nav>
 
-      {/* Fixed footer (unchanged) */}
+      {/* Fixed footer with user profile and logout */}
       <div className="p-4 border-t">
+        <div className="flex items-center justify-between p-3 rounded-xl"
+             style={{ backgroundColor: theme.primary, color: 'white' }}>
+          {!collapsed && (
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-green-600">
+                <UserCircle size={24} />
+              </div>
+              <div className="flex flex-col text-sm">
+                <span className="font-semibold text-white">{user.username || 'Nicola Web Design'}</span>
+              </div>
+            </div>
+          )}
+          <button
+            onClick={() => console.log('Logout clicked')} // Replace with actual logout logic
+            className={`p-2 rounded-full hover:bg-white/20 transition-colors
+              ${collapsed ? 'w-full flex items-center justify-center' : ''}`}
+            aria-label="Logout"
+            title={t('logout') || 'Logout'}
+          >
+            <LogOut size={20} />
+          </button>
+        </div>
+        {/* Support Center - remains from previous version */}
         <button
           onClick={() => openModal('support')}
           title={collapsed ? t('supportCenter') : undefined}
-          className={`w-full flex items-center ${collapsed ? 'justify-center' : 'justify-start'} gap-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100`}
+          className={`w-full flex items-center ${collapsed ? 'justify-center' : 'justify-start'} gap-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100 mt-2`}
         >
           <LifeBuoy size={20} className="shrink-0" />
           {!collapsed && <span>{t('supportCenter')}</span>}
@@ -115,7 +158,6 @@ export const Sidebar = ({
   );
 };
 
-  
   export const Header = ({ user, onLogout, onToggleSidebar, t, language, setLanguage, setActiveView, notifications }) => {
     const [isNotificationsOpen, setNotificationsOpen] = useState(false);
     const unreadCount = notifications.filter(n => n.unread).length;
