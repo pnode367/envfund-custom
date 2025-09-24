@@ -1,6 +1,26 @@
-import React, {  } from 'react';
+
 import {theme} from '../utils/theme';
-export const StatCard = React.memo(({ title, value, icon, color }) => ( <div className="bg-white p-4 rounded-xl shadow-sm flex items-center gap-4 hover:shadow-lg transition-shadow"> <div className={`p-3 rounded-full bg-${color}-100 text-${color}-600`}>{React.cloneElement(icon, { size: 24 })}</div> <div><p className="text-sm text-gray-500">{title}</p><p className="text-2xl font-bold">{value}</p></div> </div> ));
+import React, { isValidElement, cloneElement } from 'react';
+import { Info } from 'lucide-react';
+
+export const StatCard = React.memo(({ title, value, icon, color = 'blue' }) => {
+  const safeIcon = isValidElement(icon)
+    ? cloneElement(icon, { size: 24 })
+    : <Info size={24} />; 
+  return (
+    <div className="bg-white p-4 rounded-xl shadow-sm flex items-center gap-4 hover:shadow-lg transition-shadow">
+      <div
+        className={`p-3 rounded-full text-${color}-600 bg-${color}-100`}
+      >
+        {safeIcon}
+      </div>
+      <div>
+        <p className="text-sm text-gray-500">{title}</p>
+        <p className="text-2xl font-bold">{value}</p>
+      </div>
+    </div>
+  );
+});
 export const Modal = React.memo(({ children, onClose, title }) => ( <div className="fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4 transition-opacity"> <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl flex flex-col max-h-[90vh] transform transition-transform scale-95 animate-modal-pop-in"> <div className="p-4 border-b flex justify-between items-center"><h2 className="text-xl font-bold">{title}</h2><button onClick={onClose} className="text-gray-500 hover:text-gray-800 font-bold text-2xl">&times;</button></div> <div className="p-6 flex-grow overflow-y-auto">{children}</div> </div> </div> ));
 export const SimpleBarChart = React.memo(({ data, title }) => ( <div className="bg-white p-6 rounded-2xl shadow-sm"> <h3 className="font-bold mb-4">{title}</h3> <div className="flex items-end justify-around h-64 gap-4 text-center"> {data.map(item => ( <div key={item.label} className="flex flex-col items-center justify-end w-full"> <div className="font-bold text-sm">{item.value}</div> <div className={`w-3/4 rounded-t-lg bg-${theme.primary} hover:opacity-80 transition-all duration-300`} style={{ height: `${item.value}%` }}></div> <div className="text-xs text-gray-500 mt-2">{item.label}</div> </div> ))} </div> </div> ));
 export const SimplePieChart = React.memo(({ data, title }) => {

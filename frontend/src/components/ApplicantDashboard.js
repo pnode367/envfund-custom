@@ -54,12 +54,69 @@ export const ApplicantDashboard = ({ setDetailView, openModal, t }) => {
         </div>
     );
 };
-export const MyApplicationsView = ({ openModal, setDetailView, t }) => { return ( <div className="bg-white p-6 rounded-2xl shadow-sm"> <div className="flex justify-between items-center mb-6"> <h2 className="text-2xl font-bold">{t('myApplications')}</h2>
- <button onClick={() => openModal('newApplication')} className={`bg-${theme.primary} text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-${theme.primaryHover}`}>
-    <PlusCircle size={18}/> {t('newApplication')}</button> </div> <div className="overflow-x-auto"><table className="w-full text-sm"><thead className="bg-gray-100"><tr><th className="px-4 py-3">{t('appNumber')}</th><th className="px-4 py-3">{t('projectTitle')}</th>
-    <th className="px-4 py-3">{t('submissionDate')}</th><th className="px-4 py-3">{t('status')}</th><th className="px-4 py-3">{t('actions')}</th>
-    </tr></thead><tbody>{mockApplications.map(app => (<tr key={app.id} className="border-b hover:bg-gray-50"><td className="px-4 py-3 font-mono">{app.id}</td><td className="px-4 py-3 font-semibold">{app.title}</td>
-    <td className="px-4 py-3">{app.submissionDate}</td><td className="px-4 py-3">{getStatusChip(app.status, t)}</td><td className="px-4 py-3"><button onClick={() => setDetailView({type: 'applicationDetails', application: app})} className="text-sm bg-white border border-gray-300 rounded-lg px-3 py-1 hover:bg-gray-100">{t('viewDetails')}</button></td></tr>))}</tbody></table></div> </div> ); };
+export const MyApplicationsView = ({ apps = [], openModal, setDetailView, t }) => {
+  // optional: format a date safely
+  const fmt = (d) => {
+    if (!d) return '';
+    try { return new Date(d).toLocaleDateString(); } catch { return d; }
+  };
+
+  return (
+    <div className="bg-white p-6 rounded-2xl shadow-sm">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold">{t('myApplications')}</h2>
+
+        {/* Avoid dynamic Tailwind like bg-${theme.primary}; Tailwind won’t compile it */}
+        <button
+          onClick={() => openModal('newApplication')}
+          className="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-blue-700"
+        >
+          <PlusCircle size={18} /> {t('newApplication')}
+        </button>
+      </div>
+
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="px-4 py-3">{t('appNumber')}</th>
+              <th className="px-4 py-3">{t('projectTitle')}</th>
+              <th className="px-4 py-3">{t('submissionDate')}</th>
+              <th className="px-4 py-3">{t('status')}</th>
+              <th className="px-4 py-3">{t('actions')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {apps.map((app) => (
+              <tr key={app.id} className="border-b hover:bg-gray-50">
+                <td className="px-4 py-3 font-mono">{app.id}</td>
+                <td className="px-4 py-3 font-semibold">{app.title}</td>
+                <td className="px-4 py-3">{fmt(app.submissionDate || app.createdAt)}</td>
+                <td className="px-4 py-3">{getStatusChip(app.status, t)}</td>
+                <td className="px-4 py-3">
+                  <button
+                    onClick={() => setDetailView({ type: 'applicationDetails', application: app })}
+                    className="text-sm bg-white border border-gray-300 rounded-lg px-3 py-1 hover:bg-gray-100"
+                  >
+                    {t('viewDetails')}
+                  </button>
+                </td>
+              </tr>
+            ))}
+            {apps.length === 0 && (
+              <tr>
+                <td className="px-4 py-6 text-center text-gray-500" colSpan={5}>
+                  {t('noItems') || 'No applications yet.'}
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
 export const ChatView = ({ t, language }) => { const [activeChat, setActiveChat] = useState('support'); const [message, setMessage] = useState(''); const [history, setHistory] = useState(mockChatHistory); const handleSend = () => { if (!message.trim()) return; const newHistory = { ...history, [activeChat]: [...history[activeChat], { from: 'User', text: message, time: 'Now' }] }; setHistory(newHistory); setMessage(''); setTimeout(() => { const newHistoryWithReply = { ...newHistory, [activeChat]: [...newHistory[activeChat], { from: 'support', text: 'Thank you for your message. We will get back to you shortly.', time: 'Now' }] }; setHistory(newHistoryWithReply); }, 1000); }; return ( <div className="bg-white rounded-2xl shadow-sm h-[75vh] flex"> <div className={`w-1/3 ${language === 'ar' ? 'border-l' : 'border-r'}`}> <div className="p-4 border-b"><h2 className="font-bold text-lg">{t('chat')}</h2></div> <div className="p-2 space-y-1"> {Object.keys(history).map(chatId => ( <button key={chatId} onClick={() => setActiveChat(chatId)} className={`w-full text-left p-3 rounded-lg flex gap-3 items-center ${activeChat === chatId ? `bg-${theme.lightBg}` : 'hover:bg-gray-100'}`}> <div className="p-2 bg-gray-200 rounded-full"><Users size={20}/></div> <div> <p className="font-bold text-sm capitalize">{chatId.replace('-', ' ')}</p> <p className="text-xs text-gray-500 truncate">{history[chatId].slice(-1)[0].text}</p> </div> </button> ))} </div> </div> <div className="w-2/3 flex flex-col"> <div className="p-4 border-b flex items-center gap-3"><div className="p-2 bg-gray-200 rounded-full"><Users size={20}/></div><h3 className="font-bold capitalize">{activeChat.replace('-', ' ')}</h3></div> <div className="flex-grow p-4 space-y-4 overflow-y-auto bg-gray-50"> {history[activeChat].map((msg, i) => ( <div key={i} className={`flex items-start gap-3 ${msg.from === 'User' ? 'justify-end' : 'justify-start'}`}> <div className={`p-3 rounded-lg max-w-lg ${msg.from === 'User' ? `bg-${theme.secondary} text-white` : 'bg-white shadow-sm'}`}>{msg.text}</div> </div> ))} </div> <div className="p-4 border-t"><div className="relative"><input value={message} onChange={e => setMessage(e.target.value)} onKeyPress={e => e.key === 'Enter' && handleSend()} placeholder="Write your message..." className="w-full bg-gray-100 rounded-full py-3 focus:outline-none ps-4 pe-12"/><button onClick={handleSend} className={`absolute top-1/2 -translate-y-1/2 p-2 bg-${theme.primary} text-white rounded-full hover:bg-${theme.primaryHover} ${language === 'ar' ? 'left-3' : 'right-3'}`}><Send size={16}/></button></div></div> </div> </div> ); };
 export const ReportsAndStatsView = ({ openModal, t }) => {
     const fundingData = [ { label: t('approved'), value: 75, color: '#16a34a' }, { label: t('review'), value: 20, color: '#2563eb' }, { label: t('rejected'), value: 5, color: '#dc2626' } ];
@@ -132,101 +189,176 @@ export const AiAssistantModal = ({ onClose, t }) => {
         </Modal>
     );
 };
-export const NewApplicationForm = ({ onClose, t }) => {
-    const [files, setFiles] = useState([]);
-    const [summary, setSummary] = useState('');
-    const [keywords, setKeywords] = useState('');
-    const [isGenerating, setIsGenerating] = useState(false);
-    const handleFileChange = (e) => { if (e.target.files) setFiles(prev => [...prev, ...Array.from(e.target.files)]); };
 
-    const handleGenerateSummary = async () => {
-        if (!keywords.trim()) return;
-        setIsGenerating(true);
-        const prompt = `Based on these keywords: "${keywords}", write a professional and compelling project summary for an environmental grant application. The summary should be approximately 150 words long and suitable for an official submission.`;
-        const generatedSummary = await callGemini(prompt);
-        setSummary(generatedSummary);
-        setIsGenerating(false);
+export const NewApplicationForm = ({ onClose,t, currentUser,onSave}) => {
+  const [files, setFiles] = useState([]);
+  const [summary, setSummary] = useState('');
+  const [keywords, setKeywords] = useState('');
+  const [title, setTitle] = useState('');
+  const [amount, setAmount] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const handleFileChange = (e) => {
+    if (e.target.files) setFiles((prev) => [...prev, ...Array.from(e.target.files)]);
+  };
+
+  const handleGenerateSummary = async () => {
+    if (!keywords.trim()) return;
+    setIsGenerating(true);
+    const prompt = `Based on these keywords: "${keywords}", write a professional and compelling project summary for an environmental grant application. The summary should be approximately 150 words long and suitable for an official submission.`;
+    const generatedSummary = await callGemini(prompt);
+    setSummary(generatedSummary);
+    setIsGenerating(false);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!title.trim()) return;
+
+    // Build the application object expected by the list/detail view
+    const newApp = {
+      id: `U-${Date.now()}`,        // temp id; replace with server id if you post to API
+      title: title.trim(),
+      summary: summary.trim(),
+      status: 'submitted',          // or 'draft'
+      applicant: currentUser?.name || 'Unknown',
+      totalFunding: Number(amount || 0),
+      createdAt: new Date().toISOString(),
+      _local: true,                 // mark local/optimistic
     };
 
-    return (
-        <Modal onClose={onClose} title={t('newApplication')}>
-            <form className="space-y-4">
-                <div><label className="font-medium">{t('projectTitle')}</label><input type="text" className="w-full mt-2 p-3 border rounded-lg"/></div>
-                <div><label className="font-medium">{t('projectSummary')}</label><textarea rows="5" value={summary} onChange={(e) => setSummary(e.target.value)} className="w-full mt-2 p-3 border rounded-lg"></textarea>
-                <div className="p-2 bg-gray-50 rounded-b-lg space-y-2">
-                    <input type="text" value={keywords} onChange={(e) => setKeywords(e.target.value)} placeholder={t('enterKeywords')} className="w-full p-2 border rounded-lg text-sm" />
-                    <button type="button" onClick={handleGenerateSummary} disabled={isGenerating} className="w-full flex justify-center items-center gap-2 py-2 px-4 text-sm font-semibold rounded-lg text-white bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 transition-all">
-                        {isGenerating ? t('generating') : t('generateWithAI')}
-                    </button>
-                </div>
-                </div>
-                <div><label className="font-medium">{t('requestedAmount')}</label><input type="number" placeholder="SAR" className="w-full mt-2 p-3 border rounded-lg"/></div>
-                <div>
-                    <label className="font-medium">{t('attachments')}</label>
-                    <div className="mt-2 p-4 border-2 border-dashed rounded-lg text-center">
-                        <Upload className="mx-auto text-gray-400" size={32}/>
-                        <label htmlFor="file-upload" className="cursor-pointer text-blue-600 font-semibold"> {t('uploadFiles')} <input id="file-upload" name="file-upload" type="file" className="sr-only" multiple onChange={handleFileChange} /> </label>
-                        <p className="text-xs text-gray-500">PDF, DOCX, XLSX up to 10MB</p>
-                    </div>
-                    <div className="mt-2 space-y-2">
-                        {files.map((file, i) => <div key={i} className="flex items-center justify-between p-2 bg-gray-100 rounded"><span className="text-sm">{file.name}</span><button type="button" onClick={() => setFiles(files.filter(f => f.name !== file.name))}><Trash2 className="text-red-500" size={16}/></button></div>)}
-                    </div>
-                </div>
-                <div className="flex justify-end gap-4 pt-4">
-                    <button type="button" onClick={onClose} className="py-2 px-6 bg-gray-200 rounded-lg">{t('cancel')}</button>
-                    <button type="submit" className={`py-2 px-6 bg-${theme.primary} text-white rounded-lg`}>{t('submitApplication')}</button>
-                </div>
-            </form>
-        </Modal>
-    );
-};
-export const ApplicationDetailsView = ({ application, setDetailView, t, language, openModal }) => {
-    const applicantUser = Object.values(mockUsers).find(u => u.name === application.applicant || u.role === 'applicant'); // Simplified mapping
-    return (
-        <div className="space-y-6">
-            <button onClick={() => setDetailView(null)} className="flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-gray-900">{language === 'ar' ? <ArrowRight size={16}/> : <ArrowLeft size={16}/>} {t('back')}</button>
-            <div className="bg-white p-6 rounded-2xl shadow-sm">
-                <div className="flex justify-between items-start">
-                    <div>
-                        <h2 className="text-3xl font-bold mb-1">{application.title}</h2>
-                        <p className="text-gray-500">ID: {application.id}</p>
-                    </div>
-                    {getStatusChip(application.status, t)}
-                </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="md:col-span-2 space-y-6">
-                    <div className="bg-white p-6 rounded-2xl shadow-sm">
-                        <h3 className="text-xl font-bold mb-4 border-b pb-2">{t('projectSummary')}</h3>
-                        <p className="text-gray-600">{application.summary}</p>
-                    </div>
-                     <div className="bg-white p-6 rounded-2xl shadow-sm">
-                        <h3 className="text-xl font-bold mb-4 border-b pb-2">{t('evaluationStatus')}</h3>
-                        <p>Awaiting assignment to a reviewer.</p>
-                    </div>
-                </div>
-                <div className="space-y-6">
-                    <div className="bg-white p-6 rounded-2xl shadow-sm">
-                        <h3 className="text-xl font-bold mb-4">{t('applicantInfo')}</h3>
-                        {applicantUser && <div className="space-y-2 text-sm">
-                            <p><strong>Name:</strong> {applicantUser.name}</p>
-                            <p><strong>Email:</strong> {applicantUser.email}</p>
-                            <p><strong>Phone:</strong> {applicantUser.phone}</p>
-                        </div>}
-                    </div>
-                     <div className="bg-white p-6 rounded-2xl shadow-sm">
-                        <h3 className="text-xl font-bold mb-4">{t('fundingSummary')}</h3>
-                        <p className="text-2xl font-bold">SAR {application.totalFunding.toLocaleString()}</p>
-                    </div>
-                    <div className="bg-white p-6 rounded-2xl shadow-sm">
-                        <h3 className="text-xl font-bold mb-4">{t('actions')}</h3>
-                        <div className="space-y-2">
-                            <button onClick={() => openModal('assignReviewer', application)} className="w-full flex items-center gap-2 p-2 bg-gray-100 rounded-lg hover:bg-gray-200"><UserPlus size={16}/> {t('assignReviewer')}</button>
-                            <button className="w-full flex items-center gap-2 p-2 bg-gray-100 rounded-lg hover:bg-gray-200"><FileText size={16}/> View Documents</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    // You can POST to your API here (multipart if you need to upload files)
+    // Example optimistic flow with optional server persistence:
+    // const formData = new FormData();
+    // formData.append('payload', new Blob([JSON.stringify(newApp)], { type: 'application/json' }));
+    // files.forEach(f => formData.append('files', f));
+    // const res = await fetch('/api/applications', { method: 'POST', body: formData });
+    // const saved = await res.json(); // expect {id,...}
+    // onSave(saved.data || newApp, files);
+
+    onSave(newApp, files); // optimistic + localStorage persistence in parent
+    onClose();
+  };
+
+  return (
+    <Modal onClose={onClose} title={t('newApplication')}>
+      <form className="space-y-4" onSubmit={handleSubmit}>
+        <div>
+          <label className="font-medium">{t('projectTitle')}</label>
+          <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" className="w-full mt-2 p-3 border rounded-lg"/>
         </div>
-    );
+
+        <div>
+          <label className="font-medium">{t('projectSummary')}</label>
+          <textarea rows="5" value={summary} onChange={(e) => setSummary(e.target.value)} className="w-full mt-2 p-3 border rounded-lg"></textarea>
+          <div className="p-2 bg-gray-50 rounded-b-lg space-y-2 mt-2">
+            <input type="text" value={keywords} onChange={(e) => setKeywords(e.target.value)} placeholder={t('enterKeywords')} className="w-full p-2 border rounded-lg text-sm" />
+            <button type="button" onClick={handleGenerateSummary} disabled={isGenerating} className="w-full flex justify-center items-center gap-2 py-2 px-4 text-sm font-semibold rounded-lg text-white bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 transition-all">
+              {isGenerating ? t('generating') : t('generateWithAI')}
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label className="font-medium">{t('requestedAmount')}</label>
+          <input value={amount} onChange={(e) => setAmount(e.target.value)} type="number" placeholder="SAR" className="w-full mt-2 p-3 border rounded-lg"/>
+        </div>
+
+        <div>
+          <label className="font-medium">{t('attachments')}</label>
+          <div className="mt-2 p-4 border-2 border-dashed rounded-lg text-center">
+            <Upload className="mx-auto text-gray-400" size={32}/>
+            <label htmlFor="file-upload" className="cursor-pointer text-blue-600 font-semibold">
+              {t('uploadFiles')}
+              <input id="file-upload" name="file-upload" type="file" className="sr-only" multiple onChange={handleFileChange} />
+            </label>
+            <p className="text-xs text-gray-500">PDF, DOCX, XLSX up to 10MB</p>
+          </div>
+          <div className="mt-2 space-y-2">
+            {files.map((file, i) => (
+              <div key={`${file.name}-${i}`} className="flex items-center justify-between p-2 bg-gray-100 rounded">
+                <span className="text-sm">{file.name}</span>
+                <button type="button" onClick={() => setFiles((prev) => prev.filter((_, idx) => idx !== i))}>
+                  <Trash2 className="text-red-500" size={16}/>
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex justify-end gap-4 pt-4">
+          <button type="button" onClick={onClose} className="py-2 px-6 bg-gray-200 rounded-lg">{t('cancel')}</button>
+          {/* Avoid dynamic Tailwind classes like bg-${theme.primary}; use static or style prop */}
+          <button type="submit" className="py-2 px-6 bg-blue-600 text-white rounded-lg">{t('submitApplication')}</button>
+        </div>
+      </form>
+    </Modal>
+  );
+};
+
+
+export const ApplicationDetailsView = ({ application, setDetailView, t,language, openModal }) => {
+  const applicantUser = Object.values(mockUsers).find(
+    (u) => u.name === application.applicant || u.role === 'applicant'
+  );
+
+  return (
+    <div className="space-y-6">
+      <button onClick={() => setDetailView(null)} className="flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-gray-900">
+        {language === 'ar' ? <ArrowRight size={16}/> : <ArrowLeft size={16}/>} {t('back')}
+      </button>
+
+      <div className="bg-white p-6 rounded-2xl shadow-sm">
+        <div className="flex justify-between items-start">
+          <div>
+            <h2 className="text-3xl font-bold mb-1">{application.title}</h2>
+            <p className="text-gray-500">ID: {application.id}</p>
+          </div>
+          {getStatusChip(application.status,t)}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="md:col-span-2 space-y-6">
+          <div className="bg-white p-6 rounded-2xl shadow-sm">
+            <h3 className="text-xl font-bold mb-4 border-b pb-2">{t('projectSummary')}</h3>
+            <p className="text-gray-600">{application.summary}</p>
+          </div>
+          <div className="bg-white p-6 rounded-2xl shadow-sm">
+            <h3 className="text-xl font-bold mb-4 border-b pb-2">{t('evaluationStatus')}</h3>
+            <p>Awaiting assignment to a reviewer.</p>
+          </div>
+        </div>
+
+        <div className="space-y-6">
+          <div className="bg-white p-6 rounded-2xl shadow-sm">
+            <h3 className="text-xl font-bold mb-4">{t('applicantInfo')}</h3>
+            {applicantUser && (
+              <div className="space-y-2 text-sm">
+                <p><strong>Name:</strong> {applicantUser.name}</p>
+                <p><strong>Email:</strong> {applicantUser.email}</p>
+                <p><strong>Phone:</strong> {applicantUser.phone}</p>
+              </div>
+            )}
+          </div>
+
+          <div className="bg-white p-6 rounded-2xl shadow-sm">
+            <h3 className="text-xl font-bold mb-4">{t('fundingSummary')}</h3>
+            <p className="text-2xl font-bold">SAR {Number(application.totalFunding || 0).toLocaleString()}</p>
+          </div>
+
+          <div className="bg-white p-6 rounded-2xl shadow-sm">
+            <h3 className="text-xl font-bold mb-4">{t('actions')}</h3>
+            <div className="space-y-2">
+              <button onClick={() => openModal?.('assignReviewer', application)} className="w-full flex items-center gap-2 p-2 bg-gray-100 rounded-lg hover:bg-gray-200">
+                <UserPlus size={16}/> {t('assignReviewer')}
+              </button>
+              <button className="w-full flex items-center gap-2 p-2 bg-gray-100 rounded-lg hover:bg-gray-200">
+                <FileText size={16}/> View Documents
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };

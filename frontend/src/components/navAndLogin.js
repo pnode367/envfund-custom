@@ -1,89 +1,120 @@
-import React, { useState, useEffect } from 'react';
-import { BarChart2, FileText, Inbox, LogIn, LogOut, Menu, Bell, Search, Settings, Users, MessageSquare, PieChart, LifeBuoy, FileCheck2, Zap, Globe } from 'lucide-react';
+import React, { useState, useEffect,isValidElement, cloneElement  } from 'react';
+import { BarChart2, FileText, Inbox, LogIn, LogOut, Menu, Bell, Search, Settings, Users, MessageSquare, PieChart, LifeBuoy, FileCheck2, Zap, Globe ,ChevronLeft, ChevronRight} from 'lucide-react';
 import {theme} from '../utils/theme';
 import brandLogoUrl from '../assets/PNODE360.pptx.png';
 
-export const Sidebar = ({ user, isOpen, activeView, setActiveView, setDetailView, openModal, t, language }) => {
-    const navConfig = {
-      applicant: [
-        { key: 'dashboard', icon: <PieChart />, text: t('dashboard') },
-        { key: 'applications', icon: <FileText />, text: t('applications') },
-        { key: 'chat', icon: <MessageSquare />, text: t('chat') },
-        { key: 'settings', icon: <Settings />, text: t('settings') }
-      ],
-      reviewer: [
-        { key: 'dashboard', icon: <PieChart />, text: t('dashboard') },
-        { key: 'assignments', icon: <Inbox />, text: 'Assigned Requests' },
-        { key: 'settings', icon: <Settings />, text: t('settings') }
-      ],
-      editor: [
-        { key: 'dashboard', icon: <PieChart />, text: t('dashboard') },
-        { key: 'templates', icon: <FileCheck2 />, text: 'Manage Templates' },
-        { key: 'settings', icon: <Settings />, text: t('settings') }
-      ],
-      admin: [
-        { key: 'dashboard', icon: <PieChart />, text: t('dashboard') },
-        { key: 'manage-applications', icon: <FileText />, text: t('manageApplications') },
-        { key: 'manage-users', icon: <Users />, text: t('manageUsers') },
-        { key: 'reports', icon: <BarChart2 />, text: t('reportsAndStats') },
-        { key: 'integrations', icon: <Zap />, text: t('integrations') },
-        { key: 'settings', icon: <Settings />, text: t('settings') }
-      ]
-    };
-  
-    const navItems = navConfig[user.role] || [];
-    const handleNavClick = (key) => {
-      setDetailView(null);
-      setActiveView(key);
-    };
-  
-    const sidebarClasses =
-      language === 'ar'
-        ? `fixed top-0 right-0 border-l ${isOpen ? 'translate-x-0' : 'translate-x-full'}`
-        : `fixed top-0 left-0 border-r ${isOpen ? 'translate-x-0' : '-translate-x-full'}`;
-  
-    return (
-      <div className={`h-full bg-white border-gray-200 z-30 transition-transform duration-300 lg:translate-x-0 w-64 ${sidebarClasses} flex flex-col`}>
-        {/* Header */}
-        <div className={`flex items-center justify-center p-4 border-b h-16 bg-${theme.primary}`}>
-          <img src={theme.logoUrl} alt="Logo" className="h-12 w-18 brightness-0 invert" />
-        </div>
-  
-        {/* Scrollable nav */}
-        <nav className="flex-1 overflow-y-auto p-4">
-          <ul className="space-y-1">
-            {navItems.map((item) => (
-              <li key={item.key}>
-                <button
-                  onClick={() => handleNavClick(item.key)}
-                  className={`w-full flex items-center gap-3 p-3 rounded-lg transition-colors ${
-                    activeView === item.key
-                      ? `bg-${theme.lightBg} text-${theme.lightText} font-bold`
-                      : 'text-gray-600 hover:bg-gray-100'
-                  }`}
-                >
-                  {React.cloneElement(item.icon, { size: 20 })}
-                  <span>{item.text}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </nav>
-  
-        {/* Fixed footer (no overlap) */}
-        <div className="p-4 border-t">
-          <button
-            onClick={() => openModal('support')}
-            className="w-full flex items-center gap-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100"
-          >
-            <LifeBuoy size={20} />
-            <span>{t('supportCenter')}</span>
-          </button>
-        </div>
-      </div>
-    );
+export const Sidebar = ({
+  user,
+  isOpen,
+  collapsed,
+  setCollapsed,
+  activeView,
+  setActiveView,
+  setDetailView,
+  openModal,
+  t,
+  language
+}) => {
+  const navConfig = {
+    applicant: [
+      { key: 'dashboard', icon: <PieChart />, text: t('dashboard') },
+      { key: 'applications', icon: <FileText />, text: t('applications') },
+      { key: 'chat', icon: <MessageSquare />, text: t('chat') },
+      { key: 'settings', icon: <Settings />, text: t('settings') }
+    ],
+    reviewer: [
+      { key: 'dashboard', icon: <PieChart />, text: t('dashboard') },
+      { key: 'assignments', icon: <Inbox />, text: 'Assigned Requests' },
+      { key: 'settings', icon: <Settings />, text: t('settings') }
+    ],
+    editor: [
+      { key: 'dashboard', icon: <PieChart />, text: t('dashboard') },
+      { key: 'templates', icon: <FileCheck2 />, text: 'Manage Templates' },
+      { key: 'settings', icon: <Settings />, text: t('settings') }
+    ],
+    admin: [
+      { key: 'dashboard', icon: <PieChart />, text: t('dashboard') },
+      { key: 'manage-applications', icon: <FileText />, text: t('manageApplications') },
+      { key: 'manage-users', icon: <Users />, text: t('manageUsers') },
+      { key: 'reports', icon: <BarChart2 />, text: t('reportsAndStats') },
+      { key: 'integrations', icon: <Zap />, text: t('integrations') },
+      { key: 'settings', icon: <Settings />, text: t('settings') }
+    ]
   };
-  
+
+  const navItems = navConfig[user.role] || [];
+  const handleNavClick = (key) => { setDetailView(null); setActiveView(key); };
+
+  const sidebarClasses =
+    language === 'ar'
+      ? `fixed top-0 right-0 border-l ${isOpen ? 'translate-x-0' : 'translate-x-full'}`
+      : `fixed top-0 left-0 border-r ${isOpen ? 'translate-x-0' : '-translate-x-full'}`;
+
+  const widthClass = collapsed ? 'w-16' : 'w-64';
+
+  // keep icon size consistent & safe even if an icon import is missing
+  const renderIcon = (iconEl) =>
+    isValidElement(iconEl)
+      ? cloneElement(iconEl, { size: 22, className: 'shrink-0' })
+      : <PieChart size={22} className="shrink-0" />;
+
+  return (
+    <div className={`h-full bg-white border-gray-200 z-30 transition-transform duration-300 lg:translate-x-0 ${widthClass} ${sidebarClasses} flex flex-col`}>
+      {/* Header (logo unchanged) - make it relative so we can place the chevron in-corner */}
+      <div className={`relative flex items-center justify-center p-4 border-b h-16 bg-${theme.primary}`}>
+        <img src={theme.logoUrl} alt="Logo" className="h-12 w-18 brightness-0 invert" />
+
+        {/* Collapse toggle in header (desktop only), RTL-aware placement */}
+        <button
+          onClick={() => setCollapsed(!collapsed)}
+          className={`hidden lg:flex absolute top-1/2 -translate-y-1/2 p-2 rounded hover:bg-white/10 text-white
+            ${language === 'ar' ? 'left-2' : 'right-2'}`}
+          aria-label={collapsed ? 'Expand' : 'Collapse'}
+          title={collapsed ? (t('expand') || 'Expand') : (t('collapse') || 'Collapse')}
+        >
+          {language === 'ar'
+            ? (collapsed ? <ChevronLeft size={18}/> : <ChevronRight size={18}/>)
+            : (collapsed ? <ChevronRight size={18}/> : <ChevronLeft size={18}/>)}
+        </button>
+      </div>
+
+      {/* Scrollable nav */}
+      <nav className="flex-1 overflow-y-auto p-4">
+        <ul className="space-y-1">
+          {navItems.map((item) => (
+            <li key={item.key}>
+              <button
+                onClick={() => handleNavClick(item.key)}
+                title={collapsed ? item.text : undefined}
+                className={`w-full flex items-center ${collapsed ? 'justify-center' : 'justify-start'} gap-3 p-3 rounded-lg transition-colors ${
+                  activeView === item.key
+                    ? `bg-${theme.lightBg} text-${theme.lightText} font-bold`
+                    : 'text-gray-600 hover:bg-gray-100'
+                }`}
+              >
+                {renderIcon(item.icon)}
+                {!collapsed && <span className="truncate">{item.text}</span>}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      {/* Fixed footer (unchanged) */}
+      <div className="p-4 border-t">
+        <button
+          onClick={() => openModal('support')}
+          title={collapsed ? t('supportCenter') : undefined}
+          className={`w-full flex items-center ${collapsed ? 'justify-center' : 'justify-start'} gap-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100`}
+        >
+          <LifeBuoy size={20} className="shrink-0" />
+          {!collapsed && <span>{t('supportCenter')}</span>}
+        </button>
+      </div>
+    </div>
+  );
+};
+
   
   export const Header = ({ user, onLogout, onToggleSidebar, t, language, setLanguage, setActiveView, notifications }) => {
     const [isNotificationsOpen, setNotificationsOpen] = useState(false);
@@ -186,7 +217,10 @@ export const Sidebar = ({ user, isOpen, activeView, setActiveView, setDetailView
       </header>
     );
   };
-  export const LoginPage = ({ onLogin, t, language }) => {
+  export const LoginPage = ({ onLogin, onRegister, t, language }) => {
+    const [mode, setMode] = useState('login'); // 'login' | 'register'
+  
+    // ---- Login state ----
     const [email, setEmail] = useState('applicant@demo.com');
     const [password, setPassword] = useState('password123');
     const [role, setRole] = useState('applicant');
@@ -194,92 +228,200 @@ export const Sidebar = ({ user, isOpen, activeView, setActiveView, setDetailView
     const defaultCredentials = {
       applicant: 'applicant@demo.com',
       reviewer: 'reviewer@demo.com',
-      editor: 'editor@demo.com',
-      admin: 'admin@demo.com',
+      editor:   'editor@demo.com',
+      admin:    'admin@demo.com',
     };
   
     useEffect(() => {
+      if (mode !== 'login') return;
       if (defaultCredentials[role]) {
         setEmail(defaultCredentials[role]);
         setPassword('password123');
       }
-    }, [role]);
+    }, [role, mode]);
   
-    const handleSubmit = (e) => {
+    const handleLoginSubmit = (e) => {
       e.preventDefault();
-      onLogin(email, role);
+      onLogin?.(email, role, password);
+    };
+  
+    // ---- Register state ----
+    const [rName, setRName] = useState('');
+    const [rEmail, setREmail] = useState('');
+    const [rPassword, setRPassword] = useState('');
+    const [rPhone, setRPhone] = useState('');
+    const [rRole, setRRole] = useState('applicant'); // default to applicant
+  
+    const handleRegisterSubmit = (e) => {
+      e.preventDefault();
+      if (!rName.trim() || !rEmail.trim() || !rPassword.trim()) {
+        alert('Please fill all required fields.');
+        return;
+      }
+      onRegister?.({
+        name: rName.trim(),
+        email: rEmail.trim(),
+        password: rPassword,
+        role: rRole,
+        phone: rPhone.trim(),
+      });
     };
   
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100 font-tajawal" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-2xl shadow-lg">
-          {/* Logo (green) */}
+          {/* Logo */}
           <div className="text-center">
-          <div
-  className="w-28 h-28 mx-auto bg-green-700"
-  aria-label="Logo"
-  style={{
-    maskImage: `url(${brandLogoUrl})`,
-    maskSize: 'contain',
-    maskRepeat: 'no-repeat',
-    maskPosition: 'center',
-    WebkitMaskImage: `url(${brandLogoUrl})`,
-    WebkitMaskSize: 'contain',
-    WebkitMaskRepeat: 'no-repeat',
-    WebkitMaskPosition: 'center',
-  }}
-/>
+            <div
+              className="w-28 h-28 mx-auto bg-green-700"
+              aria-label="Logo"
+              style={{
+                maskImage: `url(${brandLogoUrl})`,
+                maskSize: 'contain',
+                maskRepeat: 'no-repeat',
+                maskPosition: 'center',
+                WebkitMaskImage: `url(${brandLogoUrl})`,
+                WebkitMaskSize: 'contain',
+                WebkitMaskRepeat: 'no-repeat',
+                WebkitMaskPosition: 'center',
+              }}
+            />
             <h2 className="mt-6 text-3xl font-bold text-gray-900">{t('grantManagementPlatform')}</h2>
             <p className="mt-2 text-sm text-gray-600">{t('forEnvironmentalSustainability')}</p>
           </div>
   
-          {/* Form */}
-          <form className="space-y-4" onSubmit={handleSubmit}>
-            <div>
-              <label className="font-medium">{t('email')}</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full mt-2 p-3 border rounded-lg"
-              />
-            </div>
-  
-            <div>
-              <label className="font-medium">{t('password')}</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full mt-2 p-3 border rounded-lg"
-              />
-            </div>
-  
-            <div>
-              <label className="font-medium">{t('userType')}</label>
-              <select
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                className="w-full mt-2 p-3 border rounded-lg bg-white"
-              >
-                <option value="applicant">{t('applicant')}</option>
-                <option value="reviewer">{t('reviewer')}</option>
-                <option value="editor">{t('editor')}</option>
-                <option value="admin">{t('admin')}</option>
-              </select>
-            </div>
-  
+          {/* Tabs */}
+          <div className="flex rounded-lg overflow-hidden border">
             <button
-              type="submit"
-              className={`w-full flex justify-center items-center gap-2 py-3 px-4 text-lg font-semibold rounded-lg text-white bg-${theme.primary} hover:bg-${theme.primaryHover} transition-all duration-300`}
+              onClick={() => setMode('login')}
+              className={`flex-1 py-2 text-center ${mode === 'login' ? 'bg-gray-100 font-semibold' : 'bg-white'}`}
             >
-              <LogIn />
               {t('login')}
             </button>
-          </form>
+            <button
+              onClick={() => setMode('register')}
+              className={`flex-1 py-2 text-center ${mode === 'register' ? 'bg-gray-100 font-semibold' : 'bg-white'}`}
+            >
+              {t('register') || 'Register'}
+            </button>
+          </div>
+  
+          {/* Forms */}
+          {mode === 'login' ? (
+            <form className="space-y-4" onSubmit={handleLoginSubmit}>
+              <div>
+                <label className="font-medium">{t('email')}</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full mt-2 p-3 border rounded-lg"
+                />
+              </div>
+  
+              <div>
+                <label className="font-medium">{t('password')}</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="w-full mt-2 p-3 border rounded-lg"
+                />
+              </div>
+  
+              <div>
+                <label className="font-medium">{t('userType')}</label>
+                <select
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  className="w-full mt-2 p-3 border rounded-lg bg-white"
+                >
+                  <option value="applicant">{t('applicant')}</option>
+                  <option value="reviewer">{t('reviewer')}</option>
+                  <option value="editor">{t('editor')}</option>
+                  <option value="admin">{t('admin')}</option>
+                </select>
+              </div>
+  
+              <button
+                type="submit"
+                className={`w-full flex justify-center items-center gap-2 py-3 px-4 text-lg font-semibold rounded-lg text-white bg-${theme.primary} hover:bg-${theme.primaryHover} transition-all duration-300`}
+              >
+                <LogIn />
+                {t('login')}
+              </button>
+            </form>
+          ) : (
+            <form className="space-y-4" onSubmit={handleRegisterSubmit}>
+              <div>
+                <label className="font-medium">{t('fullName') || 'Full Name'}</label>
+                <input
+                  type="text"
+                  value={rName}
+                  onChange={(e) => setRName(e.target.value)}
+                  required
+                  className="w-full mt-2 p-3 border rounded-lg"
+                />
+              </div>
+  
+              <div>
+                <label className="font-medium">{t('email')}</label>
+                <input
+                  type="email"
+                  value={rEmail}
+                  onChange={(e) => setREmail(e.target.value)}
+                  required
+                  className="w-full mt-2 p-3 border rounded-lg"
+                />
+              </div>
+  
+              <div>
+                <label className="font-medium">{t('password')}</label>
+                <input
+                  type="password"
+                  value={rPassword}
+                  onChange={(e) => setRPassword(e.target.value)}
+                  required
+                  className="w-full mt-2 p-3 border rounded-lg"
+                />
+              </div>
+  
+              <div>
+                <label className="font-medium">{t('phone') || 'Phone (optional)'}</label>
+                <input
+                  type="tel"
+                  value={rPhone}
+                  onChange={(e) => setRPhone(e.target.value)}
+                  className="w-full mt-2 p-3 border rounded-lg"
+                />
+              </div>
+  
+              <div>
+                <label className="font-medium">{t('userType')}</label>
+                <select
+                  value={rRole}
+                  onChange={(e) => setRRole(e.target.value)}
+                  className="w-full mt-2 p-3 border rounded-lg bg-white"
+                >
+                  <option value="applicant">{t('applicant')}</option>
+                  <option value="reviewer">{t('reviewer')}</option>
+                  <option value="editor">{t('editor')}</option>
+                  <option value="admin">{t('admin')}</option>
+                </select>
+              </div>
+  
+              <button
+                type="submit"
+                className={`w-full flex justify-center items-center gap-2 py-3 px-4 text-lg font-semibold rounded-lg text-white bg-${theme.primary} hover:bg-${theme.primaryHover} transition-all duration-300`}
+              >
+                {t('register') || 'Register'}
+              </button>
+            </form>
+          )}
         </div>
       </div>
     );
   };
+  
