@@ -135,22 +135,9 @@ export function Sidebar({
           className="relative flex items-center justify-center p-4 border-b h-16 bg-green-800"
         >
           {/* Logo (always show on mobile; hide when collapsed on lg) */}
-          {(!collapsed || (typeof window !== "undefined" && window.innerWidth < 1024)) ? (
-  // Green (original) logo
-  <img
-    src={theme.logoUrl}
-    alt="Logo"
-    className="h-10 w-auto object-contain"
-  />
-) : (
-  // White logo (by inverting original)
-  <img
-    src={theme.logoUrl}
-    alt="Logo"
-    className="h-10 w-auto object-contain invert"
-  />
-)}
-
+          {(collapsed || typeof window !== 'undefined' && window.innerWidth < 1024) && (
+            <img src={theme.logoUrl} alt="Logo" className="h-10 w-auto brightness-0 invert" />
+          )}
 
           {/* Collapse toggle (desktop only) */}
           <button
