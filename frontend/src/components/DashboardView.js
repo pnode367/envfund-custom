@@ -356,18 +356,39 @@ export const ReviewerDashboard = ({ t, user, items = [] }) => {
       </div>
     );
   };
-export const AdminDashboard = ({ openModal, t }) => { return ( <div className="space-y-6"> <div className="flex justify-between items-center">
-    <h2 className="text-2xl font-bold">Admin Dashboard</h2>
-    <button onClick={() => openModal('sendAnnouncement')} 
-    className={`bg-blue-600 text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-blue-700`}>
-        <Megaphone size={18}/> {t('sendAnnouncement')}</button></div> 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"> 
-        <StatCard title={t('totalApplications')} value={mockApplications.length} icon={<FileText />} color="blue" />
-      <StatCard title={t('approvedGrants')} value={mockApplications.filter(a => a.status === 'approved').length} icon={<CheckCircle />} color="green" />
-             <StatCard title={t('totalFunding')} value="SAR 2,165,000" icon={<DollarSign />} color="purple" /> 
-             <StatCard title={t('activeUsers')} value={Object.keys(mockUsers).length} icon={<Users />} color="yellow" /> 
-             
-             </div> </div> ); };
+  export const AdminDashboard = ({ openModal, t, apps = [], users = [] }) => {
+    const totalApps = apps.length;
+    const approvedApps = apps.filter(a => a.status === 'approved').length;
+  
+    // Sum funding if your app objects have totalFunding; fallback to 0
+    const totalFunding = apps.reduce(
+      (sum, a) => sum + (Number(a.totalFunding) || 0),
+      0
+    );
+  
+    const activeUsers = users.length; // unified list: mocks + registered (passed from parent)
+  
+    return (
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-bold">Admin Dashboard</h2>
+          <button
+            onClick={() => openModal('sendAnnouncement')}
+            className="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-blue-700"
+          >
+            <Megaphone size={18}/> {t('sendAnnouncement')}
+          </button>
+        </div>
+  
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <StatCard title={t('totalApplications')} value={totalApps} icon={<FileText />} color="blue" />
+          <StatCard title={t('approvedGrants')} value={approvedApps} icon={<CheckCircle />} color="green" />
+          <StatCard title={t('totalFunding')} value={`SAR ${totalFunding.toLocaleString()}`} icon={<DollarSign />} color="purple" />
+          <StatCard title={t('activeUsers')} value={activeUsers} icon={<Users />} color="yellow" />
+        </div>
+      </div>
+    );
+  };
 export const ApplicationManagementView = ({ apps = [], setDetailView, openModal, t }) => {
     const fmt = (d) => (d ? new Date(d).toLocaleDateString() : '');
     return (
