@@ -1,0 +1,40 @@
+export const translations = {
+    ar: {
+      dashboard: 'لوحة التحكم', register:'يسجل',applications: 'طلباتي', chat: 'المحادثات', settings: 'الإعدادات', supportCenter: 'مركز الدعم', logout: 'تسجيل الخروج', searchPlaceholder: 'بحث سريع...', communicate: 'تواصل', welcome: 'أهلاً بك', grantManagementPlatform: 'منصة إدارة البحوث والمنح', forEnvironmentalSustainability: 'اقتصاديات الاستدامة والازدهار' ,email: 'البريد الإلكتروني', password: 'كلمة المرور', userType: 'نوع المستخدم', login: 'دخول', applicant: 'مقدم طلب', reviewer: 'مراجع / مقيِّم', editor: 'محرر', admin: 'مدير نظام', newApplication: 'تقديم طلب جديد', details: 'تفاصيل', back: 'عودة', saveChanges: 'حفظ التغييرات', cancel: 'إلغاء', submit: 'إرسال',
+      activeGrants: 'منح نشطة', requestsUnderReview: 'طلبات قيد المراجعة', smartTools: 'أدوات ذكية', aiAssistant: 'المساعد الذكي', followActiveGrants: 'متابعة المنح النشطة', financials: 'الشؤون المالية', dataRoom: 'غرفة البيانات', myApplications: 'طلباتي', appNumber: 'رقم الطلب', projectTitle: 'عنوان المشروع', submissionDate: 'تاريخ التقديم', status: 'الحالة', actions: 'الإجراءات', viewDetails: 'عرض التفاصيل',
+      totalApplications: 'إجمالي الطلبات', approvedGrants: 'منح معتمدة', totalFunding: 'إجمالي التمويل', activeUsers: 'مستخدمين نشطين', applicationStatus: 'حالة الطلبات', manageApplications: 'إدارة الطلبات', manageUsers: 'إدارة المستخدمين', reportsAndStats: 'التقارير والإحصائيات', integrations: 'التكاملات', evaluationFor: 'تقييم لـ', evaluationSummary: 'ملخص التقييم', totalScore: 'النتيجة الإجمالية', recommendations: 'التوصيات والملاحظات', submitEvaluation: 'إرسال التقييم', saveDraft: 'حفظ كمسودة',
+      applicationsOverTime: 'الطلبات عبر الزمن', fundingDistributionByStatus: 'توزيع التمويل حسب الحالة', approved: 'مقبول', review: 'قيد التقييم', revision: 'للتعديل', rejected: 'مرفوض',
+      notifications: 'التنبيهات', newAppAssigned: 'تم إسناد طلب جديد لك', appApproved: 'تهانينا! تم قبول طلبك', milestoneReportDue: 'تذكير: تقرير المرحلة يستحق قريباً', viewAll: 'عرض الكل', announcement: 'إعلان جديد من الإدارة', appRejected: 'نأسف، تم رفض طلبك',
+      projectSummary: 'ملخص المشروع', requestedAmount: 'المبلغ المطلوب', attachments: 'المرفقات', uploadFiles: 'رفع ملفات', submitApplication: 'تقديم الطلب',
+      evaluationDecision: 'القرار النهائي للتقييم', approve: 'قبول', requestRevision: 'طلب تعديل', reject: 'رفض', applicationDocuments: 'مستندات الطلب',
+      quickActions: 'إجراءات سريعة', trackStatus: 'تتبع حالة طلباتك',
+      aiWelcome: 'مرحباً، أنا مساعدك الذكي. كيف يمكنني المساعدة اليوم؟', suggestedPrompts: 'مقترحات:', prompt1: 'ساعدني في كتابة ملخص للمشروع', prompt2: 'ما هي معايير التقييم الرئيسية؟',
+      reportsDashboard: 'لوحة معلومات التقارير', filterByDate: 'تصفية حسب التاريخ', generateReport: 'إنشاء تقرير',
+      applicationDetails: 'تفاصيل الطلب', applicantInfo: 'معلومات مقدم الطلب', fundingSummary: 'ملخص التمويل', evaluationStatus: 'حالة التقييم', assignReviewer: 'إسناد لمراجع',
+      nafathIntegration: 'التكامل مع "نفاذ" للتحقق من الهوية', financialSystemIntegration: 'التكامل مع النظام المالي "مالي"',
+      sendAnnouncement: 'إرسال إعلان', announcementTitle: 'عنوان الإعلان', announcementMessage: 'نص الرسالة', sendToAllUsers: 'إرسال لجميع المستخدمين',
+      sendMessage: 'إرسال رسالة', messageType: 'نوع الرسالة', sms: 'رسالة نصية', profile: 'الملف الشخصي', security: 'الأمان', notificationPreferences: 'تفضيلات الإشعارات',
+      nationalId: 'رقم الهوية الوطنية', dateOfBirth: 'تاريخ الميلاد', verifiedByNafath: 'تم التحقق بواسطة نفاذ',
+      generateWithAI: '✨ توليد باستخدام الذكاء الاصطناعي', enterKeywords: 'أدخل كلمات مفتاحية لوصف مشروعك...', generating: 'جارٍ الإنشاء...', aiAnalysis: '✨ تحليل المساعد الذكي', generateAnalysis: 'توليد تحليل', aiReportSummary: 'ملخص تقرير الذكاء الاصطناعي', generateSummary: 'توليد ملخص', reportSummaryPlaceholder: 'سيظهر هنا ملخص التقرير الذي تم إنشاؤه بواسطة الذكاء الاصطناعي.',
+    },
+    en: {
+      dashboard: 'Dashboard',register:'Register', applications: 'My Applications', chat: 'Chat', settings: 'Settings', supportCenter: 'Support Center', logout: 'Logout', searchPlaceholder: 'Quick search...', communicate: 'Communicate', welcome: 'Welcome', grantManagementPlatform: 'Research & Grant Management Platform', forEnvironmentalSustainability: 'Economics of a sustainable future', email: 'Email', password: 'Password', userType: 'User Type', login: 'Login', applicant: 'Applicant', reviewer: 'Reviewer', editor: 'Editor', admin: 'Administrator', newApplication: 'New Application', details: 'Details', back: 'Back', saveChanges: 'Save Changes', cancel: 'Cancel', submit: 'Submit',
+      activeGrants: 'Active Grants', requestsUnderReview: 'Requests Under Review', smartTools: 'Smart Tools', aiAssistant: 'AI Assistant', followActiveGrants: 'Follow-up on Active Grants', financials: 'Financials', dataRoom: 'Data Room', myApplications: 'My Applications', appNumber: 'App Number', projectTitle: 'Project Title', submissionDate: 'Submission Date', status: 'Status', actions: 'Actions', viewDetails: 'View Details',
+      totalApplications: 'Total Applications', approvedGrants: 'Approved Grants', totalFunding: 'Total Funding', activeUsers: 'Active Users', applicationStatus: 'Application Status', manageApplications: 'Manage Applications', manageUsers: 'Manage Users', reportsAndStats: 'Reports & Statistics', integrations: 'Integrations', evaluationFor: 'Evaluation for', evaluationSummary: 'Evaluation Summary', totalScore: 'Total Score', recommendations: 'Recommendations & Notes', submitEvaluation: 'Submit Evaluation', saveDraft: 'Save Draft',
+      applicationsOverTime: 'Applications Over Time', fundingDistributionByStatus: 'Funding Distribution by Status', approved: 'Approved', review: 'In Review', revision: 'Revision', rejected: 'Rejected',
+      notifications: 'Notifications', newAppAssigned: 'A new application has been assigned to you', appApproved: 'Congratulations! Your application has been approved', milestoneReportDue: 'Reminder: A milestone report is due soon', viewAll: 'View All', announcement: 'New announcement from administration', appRejected: 'Unfortunately, your application was rejected.',
+      projectSummary: 'Project Summary', requestedAmount: 'Requested Amount', attachments: 'Attachments', uploadFiles: 'Upload Files', submitApplication: 'Submit Application',
+      evaluationDecision: 'Final Evaluation Decision', approve: 'Approve', requestRevision: 'Request Revision', reject: 'Reject', applicationDocuments: 'Application Documents',
+      quickActions: 'Quick Actions', trackStatus: 'Track your application status',
+      aiWelcome: 'Hello, I am your smart assistant. How can I help you today?', suggestedPrompts: 'Suggestions:', prompt1: 'Help me write a project summary', prompt2: 'What are the main evaluation criteria?',
+      reportsDashboard: 'Reports Dashboard', filterByDate: 'Filter by Date', generateReport: 'Generate Report',
+      applicationDetails: 'Application Details', applicantInfo: 'Applicant Info', fundingSummary: 'Funding Summary', evaluationStatus: 'Evaluation Status', assignReviewer: 'Assign Reviewer',
+      nafathIntegration: 'Integration with "Nafath" for identity verification', financialSystemIntegration: 'Integration with "Mali" financial system',
+      sendAnnouncement: 'Send Announcement', announcementTitle: 'Announcement Title', announcementMessage: 'Message Text', sendToAllUsers: 'Send to all users',
+      sendMessage: 'Send Message', messageType: 'Message Type', sms: 'SMS', profile: 'Profile', security: 'Security', notificationPreferences: 'Notification Preferences',
+      nationalId: 'National ID', dateOfBirth: 'Date of Birth', verifiedByNafath: 'Verified by Nafath',
+      generateWithAI: '✨ Generate with AI', enterKeywords: 'Enter keywords to describe your project...', generating: 'Generating...', aiAnalysis: '✨ AI Assistant Analysis', generateAnalysis: 'Generate Analysis', aiReportSummary: 'AI Report Summary', generateSummary: 'Generate Summary', reportSummaryPlaceholder: 'The AI-generated report summary will appear here.',
+    }
+  };
+  export const useTranslation = (language) => (key) => translations[language][key] || key;
+  
